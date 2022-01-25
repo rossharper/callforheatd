@@ -1,0 +1,44 @@
+{
+  "name": "callforheatd",
+  "version": "1.0.0",
+  "description": "Monitor calling for heat file and periodically send call for heat command",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rossharper/callforheatd.git"
+  },
+  "keywords": [
+    "iot",
+    "node",
+    "js",
+    "433",
+    "boiler"
+  ],
+  "author": "Ross Harper",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/rossharper/callforheatd/issues"
+  },
+  "homepage": "https://github.com/rossharper/callforheatd#readme",
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.3.1",
+    "jest": "^27.4.7"
+  },
+  "dependencies": {
+    "chokidar": "^3.5.3"
+  },
+  "eslintConfig": {
+    "rules": {
+      "no-console": "off"
+    }
+  }
+}
