@@ -23,44 +23,46 @@ function parseArgs () {
     }
 }
 
-let timer = {}
-
-function sendStatePeriodically(path) {
-    
-    console.log(`${new Date().toISOString()} Switch state changed`)
-
-    function sendState() {
-        fs.readFile(path, 'utf8', (err, data) => {
-            if (err) {
-                console.error(err)
-                return
-            }
-            if (data.startsWith('1')) {
-                console.log(`${new Date().toISOString()} Calling for heat ON`)
-                exec('callforheat 1')
-            } else {
-                console.log(`${new Date().toISOString()} Calling for heat OFF`)
-                exec('callforheat 0')
-            }
-        })
-    }
-    
-    function sendStateOnInterval() {
-        console.log(`${new Date().toISOString()} Periodic timer...`)
-        sendState()
-    }
-    
-    clearInterval(timer)
-    sendState()
-    timer = setInterval(sendStateOnInterval, 1000 * 60)
+function sendState (path) {
+    fs.readFile(path, 'utf8', (err, data) => {
+        if (err) {
+            console.error(err)
+            return
+        }
+        if (data.startsWith('1')) {
+            console.log(`${new Date().toISOString()} Calling for heat ON`)
+            exec('callforheat 1')
+        } else {
+            console.log(`${new Date().toISOString()} Calling for heat OFF`)
+            exec('callforheat 0')
+        }
+    })
 }
 
-function run(args) {
+// let timer = {}
+// function sendStatePeriodically (path) {
+//     function sendStateOnInterval() {
+//         console.log(`${new Date().toISOString()} Periodic timer...`)
+//         sendState()
+//     }
+
+//     clearInterval(timer)
+//     sendState(path)
+//     timer = setInterval(sendStateOnInterval, 1000 * 60)
+// }
+
+function onSwitchStateChanged (path) {
+    console.log(`${new Date().toISOString()} Switch state changed`)
+
+    sendState(path)
+}
+
+function run (args) {
     const watcher = chokidar.watch(args.callingForHeatFile)
     watcher
-        .on('add', sendStatePeriodically)
-        .on('change', sendStatePeriodically)
-        .on('ready', path => console.log(`ready`))
+        .on('add', onSwitchStateChanged)
+        .on('change', onSwitchStateChanged)
+        .on('ready', path => console.log('ready'))
 }
 
 console.log(run(parseArgs()))
