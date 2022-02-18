@@ -23,20 +23,14 @@ function parseArgs () {
     }
 }
 
-function sendState (path) {
-    fs.readFile(path, 'utf8', (err, data) => {
-        if (err) {
-            console.error(err)
-            return
-        }
-        if (data.startsWith('1')) {
-            console.log(`${new Date().toISOString()} Calling for heat ON`)
-            exec('callforheat 1')
-        } else {
-            console.log(`${new Date().toISOString()} Calling for heat OFF`)
-            exec('callforheat 0')
-        }
-    })
+function sendState (data) {
+    if (data.startsWith('1')) {
+        console.log(`${new Date().toISOString()} Calling for heat ON`)
+        exec('callforheat 1')
+    } else {
+        console.log(`${new Date().toISOString()} Calling for heat OFF`)
+        exec('callforheat 0')
+    }
 }
 
 // let timer = {}
@@ -54,7 +48,14 @@ function sendState (path) {
 function onSwitchStateChanged (path) {
     console.log(`${new Date().toISOString()} Switch state changed`)
 
-    sendState(path)
+    fs.readFile(path, 'utf8', (err, data) => {
+        if (err) {
+            console.error(err)
+            return
+        }
+
+        setImmediate(sendState(data))
+    })
 }
 
 function run (args) {
