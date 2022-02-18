@@ -11,7 +11,7 @@ function usage () {
     process.exit()
 }
 
-function parseArgs() {
+function parseArgs () {
     function readArgValue () {
         return process.argv[++argi] || usage()
     }
@@ -43,11 +43,16 @@ function sendStatePeriodically(path) {
                 exec('callforheat 0')
             }
         })
-    }    
+    }
+    
+    function sendStateOnInterval() {
+        console.log(`${new Date().toISOString()} Periodic timer...`)
+        sendState()
+    }
     
     clearInterval(timer)
     sendState()
-    timer = setInterval(sendState, 1000 * 60)
+    timer = setInterval(sendStateOnInterval, 1000 * 60)
 }
 
 function run(args) {
