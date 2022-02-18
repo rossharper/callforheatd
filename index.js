@@ -54,7 +54,9 @@ function onSwitchStateChanged (path) {
             return
         }
 
-        setImmediate(sendState(data))
+        setImmediate(() => {
+            sendState(data)
+        })
     })
 }
 
